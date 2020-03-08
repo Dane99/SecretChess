@@ -1,0 +1,16 @@
+[info] Fast optimizing C:\Data\Projects\SecretChess\root\target\scala-2.12\root-fastopt.js
+[debug] Linker: Compute reachability: 32442 us
+[debug] Linker: Assemble LinkedClasses: 16729 us
+[debug] Basic Linking: 51067 us
+[debug] Inc. optimizer: Batch mode: false
+[debug] Inc. optimizer: Incremental part: 13804 us
+[debug] Inc. optimizer: Optimizing 0 methods.
+[debug] Inc. optimizer: Optimizer part: 303 us
+[debug] Inc. optimizer: 16330 us
+[debug] Refiner: Compute reachability: 32632 us
+[debug] Refiner: Assemble LinkedClasses: 1898 us
+[debug] Refiner: 34983 us
+[debug] Emitter: Class tree cache stats: reused: 71 -- invalidated: 0
+[debug] Emitter: Method tree cache stats: resued: 96 -- invalidated: 0
+[debug] Emitter (write output): 19496 us
+[debug] Global IR cache stats: reused: 2 -- invalidated: 0 -- trees read: 0
