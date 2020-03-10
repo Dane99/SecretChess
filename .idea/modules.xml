@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/SecretChess.iml" filepath="$PROJECT_DIR$/.idea/modules/SecretChess.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/SecretChess-build.iml" filepath="$PROJECT_DIR$/.idea/modules/SecretChess-build.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/root.iml" filepath="$PROJECT_DIR$/.idea/modules/root.iml" />
     </modules>
   </component>
 </project>
