@@ -5,6 +5,7 @@ import org.scalajs.dom.raw.HTMLImageElement
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportTopLevel
+import GameLogic._
 
 object Renderer {
   class Image(src: String) {
@@ -16,6 +17,7 @@ object Renderer {
 
     def isReady: Boolean = ready
   }
+  val board = new Board
 
   @JSExportTopLevel("main")
   def main(canvas: html.Canvas): Unit = {
@@ -36,13 +38,20 @@ object Renderer {
       //println("Y: " + e.pageY)
     //}
     canvas.onmousedown = { e: dom.MouseEvent =>
+      println("pageX:" + e.pageX / horizontalBlockSize)
       val nx = math.floor(e.pageX / horizontalBlockSize).toInt
       val ny = math.floor(e.pageY / verticalBlockSize).toInt
       if(nx >= 0 && nx <= 8 && ny >= 0 && ny <= 8) {
         if(selectedPieceX != -1 && selectedPieceY != -1){
-          //if(validMove(selectedPieceX, selectedPieceY, nx, ny)) {
-            // move piece from selectedPieceX and selectedPieceY to nx and ny.
-          //}
+          val piece = board.tiles(selectedPieceY)(selectedPieceX)
+          if(piece.occupant != null) {
+            println("Trying to move!")
+            piece.occupant.checkValidity(ny, nx)
+            if (piece.occupant.checkValidity(ny, nx)) {
+              println("Validated move!")
+              piece.occupant.makeMove(ny, nx)
+            }
+          }
         }
 
         selectedPieceX = nx
@@ -110,16 +119,21 @@ object Renderer {
       if (bgImage.isReady) {
         for(x <- 0 until 8) {
           for (y <- 0 until 8) {
-            val rnd = new scala.util.Random
-            val p = rnd.nextInt(6)
-            val w = rnd.nextInt(2) == 1
-            p match {
-              case 0 => drawQueen(x*horizontalBlockSize, y*verticalBlockSize, w)
-              case 1 => drawKing(x*horizontalBlockSize, y*verticalBlockSize, w)
-              case 2 =>  drawRook(x*horizontalBlockSize, y*verticalBlockSize, w)
-              case 3 =>  drawKnight(x*horizontalBlockSize, y*verticalBlockSize, w)
-              case 4 =>  drawBishop(x*horizontalBlockSize, y*verticalBlockSize, w)
-              case 5 => drawPawn(x*horizontalBlockSize, y*verticalBlockSize, w)
+//            val rnd = new scala.util.Random
+//            val p = rnd.nextInt(6)
+//            val w = rnd.nextInt(2) == 1
+            val piece = board.tiles(y)(x)
+            if(piece.occupant != null) {
+              val w = piece.occupant.team == Team.White
+              piece.occupant match {
+                case p: Queen => drawQueen(x * horizontalBlockSize, y * verticalBlockSize, w)
+                case p: King => drawKing(x * horizontalBlockSize, y * verticalBlockSize, w)
+                case p: Rook => drawRook(x * horizontalBlockSize, y * verticalBlockSize, w)
+                case p: Knight => drawKnight(x * horizontalBlockSize, y * verticalBlockSize, w)
+                case p: Bishop => drawBishop(x * horizontalBlockSize, y * verticalBlockSize, w)
+                case p: Pawn => drawPawn(x * horizontalBlockSize, y * verticalBlockSize, w)
+                case _ => {}
+              }
             }
           }
         }
@@ -132,13 +146,14 @@ object Renderer {
       val now = js.Date.now()
       val delta = now - prev
 
-      //update(delta / 1000)
+      //update(delta /
+      clear()
       drawBoard()
       updateBoardPieces()
 
       prev = now
     }
 
-    dom.window.setInterval(gameLoop, 50)
+    dom.window.setInterval(gameLoop, 1)
   }
 }

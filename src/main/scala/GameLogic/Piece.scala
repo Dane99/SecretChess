@@ -32,11 +32,11 @@ trait Piece {
 
   def vectIsClear(moveX: Int, moveY: Int): Boolean = {
     if(moveX == posX) {
-      (posY + 1 until moveY).forall(y => board.tiles(moveX)(y).occupant == null)
+    (math.min(posY + 1, moveY) until math.max(moveY, posY + 1)).forall(y => board.tiles(moveX)(y).occupant == null)
     } else if(moveY == posY) {
-      (posX until moveX).forall(x => board.tiles(x)(moveY).occupant == null)
+      (math.min(posX + 1, moveX) until math.max(posX + 1, moveX)).forall(x => board.tiles(x)(moveY).occupant == null)
     } else {
-      (posX until moveX).forall(a => board.tiles(a)(posY + a - posX).occupant == null)
+      (math.min(posX + 1, moveX) until math.max(posX + 1, moveX)).forall(a => board.tiles(a)(posY + a - posX).occupant == null)
     }
   }
 
