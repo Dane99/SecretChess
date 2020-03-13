@@ -2,8 +2,11 @@ package GameLogic
 
 class King extends Piece {
   def checkValidity(moveX: Int, moveY: Int): Boolean = {
-    if(isPathClear(moveX, moveY, true)) {
-      !(moveX == 0 && moveY == 0) && (moveX == 1 || moveX == 0) && (moveY == 1 || moveY == 0)
-    } else false
+    if ((moveX != posX || moveY != posY) && (math.abs(moveX - posX) == 1 || math.abs(moveY - posY) == 1)) {
+      isPathClear(moveX, moveY, true)
+    }
+    else {
+      false
+    }
   }
 }
