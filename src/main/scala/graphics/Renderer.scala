@@ -7,6 +7,10 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportTopLevel
 import GameLogic._
 
+object VisionMode extends Enumeration {
+  val Both, White, Black = Value
+}
+
 object Renderer {
   class Image(src: String) {
     private var ready: Boolean = false
@@ -18,6 +22,8 @@ object Renderer {
     def isReady: Boolean = ready
   }
   val board = new Board
+  var visionMode = VisionMode.Both
+  var boardVision = Array.fill(8,8)(true)
 
   @JSExportTopLevel("main")
   def main(canvas: html.Canvas): Unit = {
@@ -37,6 +43,26 @@ object Renderer {
       //println("X: " + e.pageX)
       //println("Y: " + e.pageY)
     //}
+
+    def switchVision(): Unit ={
+      if(visionMode == VisionMode.Both){
+        visionMode = VisionMode.White
+      }
+      else if(visionMode == VisionMode.White){
+        visionMode = VisionMode.Black
+      }
+      else{
+        visionMode = VisionMode.Both
+      }
+      boardVision = if(visionMode == VisionMode.Both) Array.fill(8,8)(true)
+      else if(visionMode == VisionMode.White) board.getTeamVision(Team.White)
+      else board.getTeamVision(Team.Black)
+    }
+
+    dom.window.addEventListener("keydown", (e: dom.KeyboardEvent) => {
+      if(e.key == "x") switchVision()
+    })
+
     canvas.onmousedown = { e: dom.MouseEvent =>
       val nx = math.floor(e.pageX / horizontalBlockSize).toInt
       val ny = math.floor(e.pageY / verticalBlockSize).toInt
@@ -119,11 +145,9 @@ object Renderer {
       if (bgImage.isReady) {
         for(x <- 0 until 8) {
           for (y <- 0 until 8) {
-//            val rnd = new scala.util.Random
-//            val p = rnd.nextInt(6)
-//            val w = rnd.nextInt(2) == 1
+
             val piece = board.tiles(x)(y)
-            if(piece.occupant != null) {
+            if(piece.occupant != null && boardVision(x)(y)) {
               val w = piece.occupant.team == Team.White
               piece.occupant match {
                 case p: Queen => drawQueen(x * horizontalBlockSize, y * verticalBlockSize, w)

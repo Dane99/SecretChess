@@ -35,12 +35,12 @@ trait Piece {
   def getPath(startX: Int, startY: Int, endX: Int, endY: Int): List[(Int, Int)] = {
     if(startX == endX){
       val dirY = if (endY - startY > 0) 1 else -1
-      val xCords = List.fill(math.abs(startY - dirY))(startX)
+      val xCords = List.fill(math.abs(startY - endY))(startX)
       xCords.zip((startY + dirY to endY by dirY).toList)
     }
     else if(startY == endY){
       val dirX = if (endX - startX > 0) 1 else -1
-      val yCords = List.fill(math.abs(startX - dirX))(startY)
+      val yCords = List.fill(math.abs(startX - endX))(startY)
       ((startX + dirX to endX by dirX).toList).zip(yCords)
     }
     else{

@@ -22,7 +22,6 @@ class Board {
           case 6 => tiles(x)(y) = new Tile(new Knight)
           case 7 => tiles(x)(y) = new Tile(new Rook)
         }
-
       }
       else if(y == 1 || y == 6) tiles(x)(y) = new Tile(new Pawn)
       else tiles(x)(y) = new Tile(null)
@@ -35,18 +34,16 @@ class Board {
     }
   }
 
-//  def computeTeamVision(team: Team): Array[Array[Boolean]] = {
-//    val visionArr: Array[Array[Boolean]] = tiles.map(_.map(x => false))
-//    allPieces.filter(_.team == team).foreach {p =>
-//      val pVision = p.computeVision
-//      for(x <- visionArr.indices) {
-//        for(y <- visionArr(x).indices) {
-//          if(pVision(x)(y)) visionArr(x)(y) = true
-//        }
-//      }
-//    }
-//    visionArr
-//  }
+  def getTeamVision(team: Team): Array[Array[Boolean]] = {
+    val vision = Array.fill(8, 8)(false)
+    for(piece <- allPieces if piece.team == team){
+      for(x <- 0 until 8; y <- 0 until 8){
+        vision(x)(y) |= piece.checkValidity(x, y)
+        vision(piece.posX)(piece.posY) |= true
+      }
+    }
+    vision
+  }
 
   def allPieces: List[Piece] = {
     val buff = new mutable.ArrayBuffer[Piece]()
