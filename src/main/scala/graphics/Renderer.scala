@@ -38,18 +38,18 @@ object Renderer {
       //println("Y: " + e.pageY)
     //}
     canvas.onmousedown = { e: dom.MouseEvent =>
-      println("pageX:" + e.pageX / horizontalBlockSize)
       val nx = math.floor(e.pageX / horizontalBlockSize).toInt
       val ny = math.floor(e.pageY / verticalBlockSize).toInt
+      // Ensure the move in within the board
       if(nx >= 0 && nx <= 8 && ny >= 0 && ny <= 8) {
+        // Check that there is a selected piece
         if(selectedPieceX != -1 && selectedPieceY != -1){
-          val piece = board.tiles(selectedPieceY)(selectedPieceX)
+          // Select piece
+          val piece = board.tiles(selectedPieceX)(selectedPieceY)
+          // Empty tiles are null
           if(piece.occupant != null) {
-            println("Trying to move!")
-            piece.occupant.checkValidity(ny, nx)
-            if (piece.occupant.checkValidity(ny, nx)) {
-              println("Validated move!")
-              piece.occupant.makeMove(ny, nx)
+            if (piece.occupant.makeMove(nx, ny)) {
+              println("Move was executed!")
             }
           }
         }
@@ -122,7 +122,7 @@ object Renderer {
 //            val rnd = new scala.util.Random
 //            val p = rnd.nextInt(6)
 //            val w = rnd.nextInt(2) == 1
-            val piece = board.tiles(y)(x)
+            val piece = board.tiles(x)(y)
             if(piece.occupant != null) {
               val w = piece.occupant.team == Team.White
               piece.occupant match {
@@ -154,6 +154,6 @@ object Renderer {
       prev = now
     }
 
-    dom.window.setInterval(gameLoop, 1)
+    dom.window.setInterval(gameLoop, 50)
   }
 }

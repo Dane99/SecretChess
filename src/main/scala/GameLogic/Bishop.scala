@@ -2,8 +2,10 @@ package GameLogic
 
 class Bishop extends Piece {
   def checkValidity(moveX: Int, moveY: Int): Boolean = {
-    if(vectIsClear(moveX, moveY)) {
-      moveX != _posX && moveY != _posY && math.abs(moveX - _posX) == math.abs(moveY - _posY) && !board.hasFriend(moveX, moveY, team)
-    } else false
+    if(isPathClear(moveX, moveY)) {
+      math.abs(moveX - posX) == math.abs(moveY - posY)
+    } else {
+      false
+    }
   }
 }
