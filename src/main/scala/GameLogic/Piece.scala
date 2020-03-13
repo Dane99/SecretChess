@@ -52,8 +52,9 @@ trait Piece {
     }
   }
 
-  def isPathClear(moveX: Int, moveY: Int): Boolean = {
-    val path = getPath(posX, posY, moveX, moveY)
+  def isPathClear(moveX: Int, moveY: Int, captureMove: Boolean): Boolean = {
+    val path = getPath(posX, posY, moveX, moveY).dropRight(if(captureMove && board.hasEnemy(moveX, moveY, team)) 1 else 0)
+    println("Path:" + path)
     path.forall(tile => board.tiles(tile._1)(tile._2).occupant == null)
   }
 

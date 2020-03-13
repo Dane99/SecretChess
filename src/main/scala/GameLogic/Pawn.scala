@@ -6,8 +6,10 @@ class Pawn extends Piece {
       // Empty space move
       val moveLimit = if(hasMoved) 1 else 2
       team match {
-        case Team.White => (moveX == posX && (posY - moveY <= moveLimit) && (posY - moveY > 0) && isPathClear(moveX, moveY))
-        case Team.Black => (moveX == posX && (moveY - posY <= moveLimit) && (moveY - posY > 0) && isPathClear(moveX, moveY))
+        case Team.White => (moveX == posX && (posY - moveY <= moveLimit)
+                          && (posY - moveY > 0) && isPathClear(moveX, moveY, false))
+        case Team.Black => (moveX == posX && (moveY - posY <= moveLimit)
+                          && (moveY - posY > 0) && isPathClear(moveX, moveY, false))
       }
     }
     else if(board.hasEnemy(moveX, moveY, team)){
