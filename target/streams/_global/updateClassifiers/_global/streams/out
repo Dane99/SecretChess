@@ -1,3 +1,4 @@
-[debug] "not up to date. inChanged = true, force = false
-[debug] Updating ProjectRef(uri("file:/C:/Data/Projects/SecretChess/"), "secretchess")...
-[debug] Done updating ProjectRef(uri("file:/C:/Data/Projects/SecretChess/"), "secretchess")
+[warn] scalajs-compiler_2.13.1-1.0.0-sources.jar no longer exists at /C:/Users/danec/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-compiler_2.13.1/1.0.0/scalajs-compiler_2.13.1-1.0.0-sources.jar
+[debug] "not up to date. inChanged = false, force = false
+[debug] Updating ProjectRef(uri("file:/home/danec/IdeaProjects/SecretChess/"), "secretchess")...
+[debug] Done updating ProjectRef(uri("file:/home/danec/IdeaProjects/SecretChess/"), "secretchess")

@@ -8,28 +8,22 @@ trait Piece {
   protected var _hasMoved: Boolean = false
   protected var _team: Team = null
   protected var board: Board = null
+  
+  var numberOfMoves = 0
+
+  def getValue(): Int
 
   def initPos(x: Int, y: Int): Unit = {
     _posX = x
     _posY = y
   }
 
+  def move(): Unit = {
+    _hasMoved = true
+  }
+
   def initBoard(brd: Board): Unit = board = brd
   def initTeam(tm: Team): Unit = _team = tm
-
-  def makeMove(moveX: Int, moveY: Int): Boolean = {
-    if(checkValidity(moveX, moveY) && (moveX != posX || moveY != posY)) {
-      val oldX = _posX
-      val oldY = _posY
-      _posX = moveX
-      _posY = moveY
-      _hasMoved = true
-      board.takeTurn(team, this, oldX, oldY)
-      true
-    } else {
-      false
-    }
-  }
 
   // Exclusive to start, inclusive to end
   def getPath(startX: Int, startY: Int, endX: Int, endY: Int): List[(Int, Int)] = {
@@ -54,7 +48,6 @@ trait Piece {
 
   def isPathClear(moveX: Int, moveY: Int, captureMove: Boolean): Boolean = {
     val path = getPath(posX, posY, moveX, moveY).dropRight(if(captureMove && board.hasEnemy(moveX, moveY, team)) 1 else 0)
-    println("Path:" + path)
     path.forall(tile => board.tiles(tile._1)(tile._2).occupant == null)
   }
 
@@ -70,6 +63,18 @@ trait Piece {
 
   def posX: Int = _posX
   def posY: Int = _posY
+  def updatePosition(x: Int, y: Int): Unit = {
+    _hasMoved = true
+    _posX = x
+    _posY = y
+    numberOfMoves += 1
+  }
+  def revertPosition(x: Int, y: Int): Unit = {
+    _posX = x
+    _posY = y
+    numberOfMoves -= 1
+    if(numberOfMoves == 0) _hasMoved = false
+  }
   def hasMoved: Boolean = _hasMoved
   def team: Team = _team
 }

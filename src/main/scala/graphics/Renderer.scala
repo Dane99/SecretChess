@@ -21,7 +21,7 @@ object Renderer {
 
     def isReady: Boolean = ready
   }
-  val board = new Board
+  val board = new Board(true)
   var visionMode = VisionMode.Both
   var boardVision = Array.fill(8,8)(true)
 
@@ -54,6 +54,10 @@ object Renderer {
       else{
         visionMode = VisionMode.Both
       }
+      updateVision()
+    }
+
+    def updateVision(): Unit = {
       boardVision = if(visionMode == VisionMode.Both) Array.fill(8,8)(true)
       else if(visionMode == VisionMode.White) board.getTeamVision(Team.White)
       else board.getTeamVision(Team.Black)
@@ -71,11 +75,12 @@ object Renderer {
         // Check that there is a selected piece
         if(selectedPieceX != -1 && selectedPieceY != -1){
           // Select piece
-          val piece = board.tiles(selectedPieceX)(selectedPieceY)
+          val tile = board.tiles(selectedPieceX)(selectedPieceY)
           // Empty tiles are null
-          if(piece.occupant != null) {
-            if (piece.occupant.makeMove(nx, ny)) {
+          if(tile.occupant != null) {
+            if (board.makeMove(Move(tile.occupant, nx, ny))) {
               println("Move was executed!")
+              updateVision()
             }
           }
         }
@@ -133,8 +138,14 @@ object Renderer {
     def drawBoard(): Unit = {
       for(i <- 0 until 8) {
         for(j <- 0 until 8) {
-          if((i+j)%2==1) ctx.fillStyle = s"rgb(50, 100, 50)"
-          else ctx.fillStyle = s"rgb(255, 255, 255)"
+          if((i+j)%2==1) {
+            if(boardVision(i)(j)) ctx.fillStyle = s"rgb(50, 100, 50)"
+            else ctx.fillStyle = s"rgb(15, 30, 15)"
+          }
+          else {
+            if(boardVision(i)(j)) ctx.fillStyle = s"rgb(255, 255, 255)"
+            else ctx.fillStyle = s"rgb(64, 64, 64)"
+          }
           ctx.fillRect(i*horizontalBlockSize, j*verticalBlockSize, verticalBlockSize, horizontalBlockSize)
         }
       }
@@ -142,6 +153,10 @@ object Renderer {
 
     def updateBoardPieces() {
       val random = new scala.util.Random
+
+      // Checks if there is a bot opponent and makes them move
+      board.update
+
       if (bgImage.isReady) {
         for(x <- 0 until 8) {
           for (y <- 0 until 8) {

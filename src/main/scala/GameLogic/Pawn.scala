@@ -1,6 +1,7 @@
 package GameLogic
 
 class Pawn extends Piece {
+  def getValue(): Int = 1
   def checkValidity(moveX: Int, moveY: Int): Boolean = {
     if(!board.hasPiece(moveX, moveY)) {
       // Empty space move
